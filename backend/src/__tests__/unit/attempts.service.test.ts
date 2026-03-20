@@ -137,7 +137,6 @@ describe('attemptsService.submitAttempt', () => {
 
     const started = await attemptsService.startAttempt(user._id.toString(), exam._id.toString());
 
-    // Backdating startedAt so that it appears the time limit has passed
     await Attempt.findByIdAndUpdate(started.attemptId, {
       startedAt: new Date(Date.now() - 2 * 60 * 1000),
     });
