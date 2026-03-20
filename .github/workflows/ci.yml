@@ -1,0 +1,12 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build
+        uses: actions/checkout@v4

@@ -18,6 +18,7 @@ function logout() {
       <div class="nav-links">
         <router-link to="/dashboard">Dashboard</router-link>
         <router-link to="/exams">Exams</router-link>
+        <router-link to="/forum">Forum</router-link>
         <span class="nav-user">{{ auth.user?.username }}</span>
         <button @click="logout" class="btn-logout">Logout</button>
       </div>

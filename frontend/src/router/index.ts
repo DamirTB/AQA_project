@@ -46,6 +46,18 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/forum',
+      name: 'Forum',
+      component: () => import('../views/Forum.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/forum/:id',
+      name: 'TopicDetail',
+      component: () => import('../views/TopicDetail.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/',
       redirect: '/dashboard',
     },
