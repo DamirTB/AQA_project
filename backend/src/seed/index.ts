@@ -1,3 +1,4 @@
+import { Category } from '../models/Category';
 import { Exam } from '../models/Exam';
 import { Question } from '../models/Question';
 
@@ -156,11 +157,22 @@ export async function seedDatabase(): Promise<void> {
 
   console.log('Seeding database...');
 
+  const standardizedTests = await Category.create({
+    name: 'Standardized Tests',
+    description: 'Practice exams for standardized tests such as SAT, GRE, and GMAT.',
+  });
+
+  const languageExams = await Category.create({
+    name: 'Language Exams',
+    description: 'Preparation exams for language proficiency tests such as IELTS and TOEFL.',
+  });
+
   const satExam = await Exam.create({
     title: 'SAT Practice Test',
     description:
       'Practice questions covering SAT Math and Evidence-Based Reading & Writing sections including algebra, geometry, grammar, and vocabulary.',
     timeLimitMinutes: 15,
+    categoryId: standardizedTests._id,
   });
 
   const ieltsExam = await Exam.create({
@@ -168,6 +180,7 @@ export async function seedDatabase(): Promise<void> {
     description:
       'Prepare for the IELTS Academic test with questions on grammar, vocabulary, reading comprehension, and common English idioms.',
     timeLimitMinutes: 20,
+    categoryId: languageExams._id,
   });
 
   await Question.insertMany(
@@ -178,5 +191,5 @@ export async function seedDatabase(): Promise<void> {
     ieltsQuestions.map((q) => ({ ...q, examId: ieltsExam._id }))
   );
 
-  console.log('Database seeded with 2 exams (SAT + IELTS) and 20 questions.');
+  console.log('Database seeded with 2 categories, 2 exams (SAT + IELTS), and 20 questions.');
 }

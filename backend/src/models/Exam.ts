@@ -1,9 +1,10 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IExam extends Document {
   title: string;
   description: string;
   timeLimitMinutes: number;
+  categoryId: Types.ObjectId;
   createdAt: Date;
 }
 
@@ -22,6 +23,11 @@ const examSchema = new Schema<IExam>({
     type: Number,
     required: [true, 'Time limit is required'],
     min: [1, 'Time limit must be at least 1 minute'],
+  },
+  categoryId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+    default: null,
   },
   createdAt: {
     type: Date,
