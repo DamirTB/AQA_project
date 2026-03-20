@@ -9,6 +9,18 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  mongo-express:
+    image: mongo-express:latest
+    container_name: exam-mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017/
+      - ME_CONFIG_BASICAUTH=false
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend

@@ -1,162 +1,147 @@
 import { Exam } from '../models/Exam';
 import { Question } from '../models/Question';
 
-const jsQuestions = [
+const satQuestions = [
   {
-    text: 'What is the output of typeof null in JavaScript?',
-    options: ['null', 'undefined', 'object', 'boolean'],
-    correctOption: 2,
+    text: 'If 3x + 7 = 22, what is the value of x?',
+    options: ['3', '5', '7', '15'],
+    correctOption: 1,
     order: 1,
   },
   {
-    text: 'Which method converts a JSON string to a JavaScript object?',
-    options: ['JSON.stringify()', 'JSON.parse()', 'JSON.convert()', 'JSON.toObject()'],
-    correctOption: 1,
+    text: 'Which of the following is equivalent to 2/5 of 60?',
+    options: ['12', '20', '24', '30'],
+    correctOption: 2,
     order: 2,
   },
   {
-    text: 'What does the "===" operator check?',
-    options: ['Value only', 'Type only', 'Value and type', 'Reference only'],
-    correctOption: 2,
+    text: 'A triangle has angles measuring 45° and 90°. What is the measure of the third angle?',
+    options: ['30°', '45°', '60°', '90°'],
+    correctOption: 1,
     order: 3,
   },
   {
-    text: 'Which keyword declares a block-scoped variable?',
-    options: ['var', 'let', 'both var and let', 'none of the above'],
-    correctOption: 1,
+    text: 'If the area of a square is 144 square units, what is the length of one side?',
+    options: ['10', '11', '12', '14'],
+    correctOption: 2,
     order: 4,
   },
   {
-    text: 'What is a closure in JavaScript?',
-    options: [
-      'A function that has no return value',
-      'A function along with its lexical environment',
-      'A way to close browser windows',
-      'A built-in JavaScript object',
-    ],
+    text: 'What is the slope of the line passing through points (2, 3) and (6, 11)?',
+    options: ['1', '2', '3', '4'],
     correctOption: 1,
     order: 5,
   },
   {
-    text: 'Which array method creates a new array with filtered elements?',
-    options: ['map()', 'forEach()', 'filter()', 'reduce()'],
-    correctOption: 2,
+    text: 'The word "ubiquitous" most nearly means:',
+    options: ['Rare and unusual', 'Found everywhere', 'Difficult to understand', 'Recently discovered'],
+    correctOption: 1,
     order: 6,
   },
   {
-    text: 'What does "use strict" do?',
+    text: 'Which sentence is grammatically correct?',
     options: [
-      'Makes code run faster',
-      'Enables strict mode with additional error checking',
-      'Disables all warnings',
-      'Enables TypeScript mode',
+      'Neither the students nor the teacher were ready.',
+      'Neither the students nor the teacher was ready.',
+      'Neither the students or the teacher were ready.',
+      'Neither the students or the teacher was ready.',
     ],
     correctOption: 1,
     order: 7,
   },
   {
-    text: 'Which of the following is NOT a primitive type in JavaScript?',
-    options: ['string', 'number', 'object', 'boolean'],
-    correctOption: 2,
+    text: 'If f(x) = 2x² - 3x + 1, what is f(3)?',
+    options: ['8', '10', '12', '16'],
+    correctOption: 1,
     order: 8,
   },
   {
-    text: 'What does the spread operator (...) do?',
-    options: [
-      'Compresses an array',
-      'Expands an iterable into individual elements',
-      'Deletes array elements',
-      'Sorts an array',
-    ],
-    correctOption: 1,
+    text: 'A store offers a 20% discount on an item priced at $80. What is the sale price?',
+    options: ['$16', '$60', '$64', '$68'],
+    correctOption: 2,
     order: 9,
   },
   {
-    text: 'What is the output of: console.log(1 + "2")?',
-    options: ['3', '12', 'NaN', 'undefined'],
+    text: 'In the sentence "The council decided to defer the decision," what does "defer" mean?',
+    options: ['Cancel permanently', 'Postpone to a later time', 'Announce publicly', 'Reverse completely'],
     correctOption: 1,
     order: 10,
   },
 ];
 
-const webQuestions = [
+const ieltsQuestions = [
   {
-    text: 'What does HTML stand for?',
-    options: [
-      'Hyper Text Markup Language',
-      'High Tech Modern Language',
-      'Hyper Transfer Markup Language',
-      'Home Tool Markup Language',
-    ],
-    correctOption: 0,
+    text: 'Choose the correct word: "She has been living in London _____ 2015."',
+    options: ['for', 'since', 'from', 'during'],
+    correctOption: 1,
     order: 1,
   },
   {
-    text: 'Which CSS property is used to change text color?',
-    options: ['font-color', 'text-color', 'color', 'foreground-color'],
-    correctOption: 2,
+    text: 'Which word is a synonym of "abundant"?',
+    options: ['Scarce', 'Plentiful', 'Moderate', 'Insufficient'],
+    correctOption: 1,
     order: 2,
   },
   {
-    text: 'What does CSS stand for?',
+    text: 'Choose the correct sentence:',
     options: [
-      'Computer Style Sheets',
-      'Cascading Style Sheets',
-      'Creative Style System',
-      'Colorful Style Sheets',
+      'If I would have known, I would have come.',
+      'If I had known, I would have come.',
+      'If I have known, I would have come.',
+      'If I knew, I would have come.',
     ],
     correctOption: 1,
     order: 3,
   },
   {
-    text: 'Which HTTP method is used to update a resource?',
-    options: ['GET', 'POST', 'PUT', 'DELETE'],
-    correctOption: 2,
+    text: 'The opposite of "benevolent" is:',
+    options: ['Generous', 'Malevolent', 'Indifferent', 'Grateful'],
+    correctOption: 1,
     order: 4,
   },
   {
-    text: 'What is the default port for HTTPS?',
-    options: ['80', '443', '8080', '3000'],
-    correctOption: 1,
+    text: 'Choose the correct word: "The report was _____ by the committee last week."',
+    options: ['reviewing', 'review', 'reviewed', 'reviews'],
+    correctOption: 2,
     order: 5,
   },
   {
-    text: 'Which HTML tag is used for the largest heading?',
-    options: ['<heading>', '<h6>', '<h1>', '<head>'],
-    correctOption: 2,
+    text: '"To break the ice" means:',
+    options: [
+      'To damage something frozen',
+      'To initiate conversation in an awkward situation',
+      'To solve a difficult problem',
+      'To end a relationship',
+    ],
+    correctOption: 1,
     order: 6,
   },
   {
-    text: 'What does REST stand for?',
+    text: 'Which sentence uses the correct form of the comparative?',
     options: [
-      'Representational State Transfer',
-      'Remote Execution Server Technology',
-      'Reliable Endpoint Service Tool',
-      'Request Event State Tracker',
+      'This book is more better than that one.',
+      'This book is better than that one.',
+      'This book is most better than that one.',
+      'This book is gooder than that one.',
     ],
-    correctOption: 0,
+    correctOption: 1,
     order: 7,
   },
   {
-    text: 'Which status code means "Not Found"?',
-    options: ['200', '301', '404', '500'],
+    text: 'Choose the correct preposition: "She is very keen _____ learning new languages."',
+    options: ['at', 'in', 'on', 'for'],
     correctOption: 2,
     order: 8,
   },
   {
-    text: 'What is the purpose of the <meta> tag in HTML?',
-    options: [
-      'To display metadata on the page',
-      'To provide metadata about the document',
-      'To create a navigation menu',
-      'To include external scripts',
-    ],
+    text: 'What does "pragmatic" mean?',
+    options: ['Idealistic and visionary', 'Dealing with things in a practical way', 'Overly emotional', 'Extremely cautious'],
     correctOption: 1,
     order: 9,
   },
   {
-    text: 'Which CSS display value hides an element completely?',
-    options: ['hidden', 'none', 'invisible', 'collapse'],
+    text: 'Choose the correct word: "Despite _____ hard, he failed the exam."',
+    options: ['to study', 'studying', 'studied', 'study'],
     correctOption: 1,
     order: 10,
   },
@@ -171,27 +156,27 @@ export async function seedDatabase(): Promise<void> {
 
   console.log('Seeding database...');
 
-  const jsExam = await Exam.create({
-    title: 'JavaScript Fundamentals',
+  const satExam = await Exam.create({
+    title: 'SAT Practice Test',
     description:
-      'Test your knowledge of core JavaScript concepts including types, closures, array methods, and ES6+ features.',
+      'Practice questions covering SAT Math and Evidence-Based Reading & Writing sections including algebra, geometry, grammar, and vocabulary.',
     timeLimitMinutes: 15,
   });
 
-  const webExam = await Exam.create({
-    title: 'Web Development Basics',
+  const ieltsExam = await Exam.create({
+    title: 'IELTS Academic Preparation',
     description:
-      'A quiz covering fundamental web development topics including HTML, CSS, HTTP, and REST APIs.',
+      'Prepare for the IELTS Academic test with questions on grammar, vocabulary, reading comprehension, and common English idioms.',
     timeLimitMinutes: 20,
   });
 
   await Question.insertMany(
-    jsQuestions.map((q) => ({ ...q, examId: jsExam._id }))
+    satQuestions.map((q) => ({ ...q, examId: satExam._id }))
   );
 
   await Question.insertMany(
-    webQuestions.map((q) => ({ ...q, examId: webExam._id }))
+    ieltsQuestions.map((q) => ({ ...q, examId: ieltsExam._id }))
   );
 
-  console.log('Database seeded with 2 exams and 20 questions.');
+  console.log('Database seeded with 2 exams (SAT + IELTS) and 20 questions.');
 }
