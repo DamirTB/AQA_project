@@ -1,3 +1,4 @@
+<!--frontend/src/views/Forum.vue-->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import api from '../api/client';
