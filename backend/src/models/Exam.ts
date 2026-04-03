@@ -1,3 +1,4 @@
+// backend/src/models/Exam.ts
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IExam extends Document {

@@ -1,3 +1,4 @@
+// backend/src/models/ForumComment.ts
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IForumComment extends Document {

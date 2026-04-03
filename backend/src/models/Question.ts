@@ -1,3 +1,4 @@
+// backend/src/models/Question.ts
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IQuestion extends Document {

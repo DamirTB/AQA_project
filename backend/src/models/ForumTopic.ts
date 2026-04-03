@@ -1,3 +1,4 @@
+// backend/src/models/ForumTopic.ts
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IForumTopic extends Document {

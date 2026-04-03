@@ -1,3 +1,4 @@
+// backend/src/models/Category.ts
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ICategory extends Document {

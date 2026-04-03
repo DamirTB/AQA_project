@@ -1,3 +1,4 @@
+// backend/src/models/Bookmark.ts
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IBookmark extends Document {
