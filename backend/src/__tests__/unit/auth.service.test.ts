@@ -1,3 +1,4 @@
+// backend/src/__tests__/unit/auth.service.test.ts
 import { connect, disconnect, clearCollections } from '../testDb';
 import { createUser } from '../helpers';
 import * as authService from '../../services/auth.service';

@@ -1,3 +1,4 @@
+// backend/src/__tests__/integration/auth.test.ts
 import request from 'supertest';
 import app from '../../app';
 import { connect, disconnect, clearCollections } from '../testDb';

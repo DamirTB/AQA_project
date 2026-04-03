@@ -1,3 +1,4 @@
+// backend/src/__tests__/integration/bookmarks.test.ts
 import mongoose from 'mongoose';
 import request from 'supertest';
 import app from '../../app';

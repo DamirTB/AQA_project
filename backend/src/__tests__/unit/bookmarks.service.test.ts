@@ -1,3 +1,4 @@
+// backend/src/__tests__/unit/bookmarks.service.test.ts
 import mongoose from 'mongoose';
 import { connect, disconnect, clearCollections } from '../testDb';
 import { createUser, createExamWithQuestions } from '../helpers';
