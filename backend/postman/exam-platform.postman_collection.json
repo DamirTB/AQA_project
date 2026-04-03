@@ -1,0 +1,394 @@
+{
+  "info": {
+    "name": "Exam Preparation Platform — API (Backend)",
+    "description": "Automated API tests for the Express backend. Run with: npm run test:api (server must be running on base_url).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000", "type": "string" },
+    { "key": "auth_token", "value": "", "type": "string" },
+    { "key": "user_email", "value": "", "type": "string" },
+    { "key": "test_username", "value": "", "type": "string" },
+    { "key": "exam_id", "value": "", "type": "string" },
+    { "key": "attempt_id", "value": "", "type": "string" },
+    { "key": "attempt_answers", "value": "{}", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /api/health",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Body has status ok', function () {",
+                  "  var j = pm.response.json();",
+                  "  pm.expect(j.status).to.eql('ok');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register — Valid",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "var ts = Date.now();",
+                  "pm.collectionVariables.set('test_username', 'pm_user_' + ts);",
+                  "pm.collectionVariables.set('user_email', 'pm_user_' + ts + '@example.com');"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Has token and user', function () {",
+                  "  var j = pm.response.json();",
+                  "  pm.expect(j.token).to.be.a('string');",
+                  "  pm.expect(j.user).to.have.property('email');",
+                  "  pm.expect(j.user).to.not.have.property('passwordHash');",
+                  "});",
+                  "pm.collectionVariables.set('auth_token', pm.response.json().token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{test_username}}\",\n  \"email\": \"{{user_email}}\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Register — Duplicate email (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 409', function () { pm.response.to.have.status(409); });",
+                  "pm.test('Error mentions exists', function () {",
+                  "  pm.expect(pm.response.json().error).to.match(/exists/i);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"other_name\",\n  \"email\": \"{{user_email}}\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Login — Valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Has token', function () { pm.expect(pm.response.json().token).to.be.a('string'); });",
+                  "pm.collectionVariables.set('auth_token', pm.response.json().token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login — Wrong password (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 401', function () { pm.response.to.have.status(401); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"wrong_password\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login — Missing password (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function () { pm.response.to.have.status(400); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Exams",
+      "item": [
+        {
+          "name": "GET /api/exams — no token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 401', function () { pm.response.to.have.status(401); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/exams"
+          }
+        },
+        {
+          "name": "GET /api/exams",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Array with at least one exam (seeded DB)', function () {",
+                  "  var exams = pm.response.json();",
+                  "  pm.expect(exams).to.be.an('array');",
+                  "  pm.expect(exams.length).to.be.above(0);",
+                  "  pm.expect(exams[0]).to.have.property('id');",
+                  "  pm.expect(exams[0]).to.have.property('title');",
+                  "});",
+                  "pm.collectionVariables.set('exam_id', pm.response.json()[0].id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+            ],
+            "url": "{{base_url}}/api/exams"
+          }
+        },
+        {
+          "name": "GET /api/exams/:id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Questions omit correctOption', function () {",
+                  "  var qs = pm.response.json().questions || [];",
+                  "  qs.forEach(function (q) { pm.expect(q).to.not.have.property('correctOption'); });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+            ],
+            "url": "{{base_url}}/api/exams/{{exam_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Attempts",
+      "item": [
+        {
+          "name": "POST /api/attempts/start",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 or 201', function () {",
+                  "  pm.expect([200, 201]).to.include(pm.response.code);",
+                  "});",
+                  "var j = pm.response.json();",
+                  "pm.test('Has attemptId and questions', function () {",
+                  "  pm.expect(j.attemptId).to.be.a('string');",
+                  "  pm.expect(j.questions).to.be.an('array');",
+                  "});",
+                  "pm.collectionVariables.set('attempt_id', j.attemptId);",
+                  "var answers = {};",
+                  "(j.questions || []).forEach(function (q) { answers[q.id] = 0; });",
+                  "pm.collectionVariables.set('attempt_answers', JSON.stringify(answers));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"examId\": \"{{exam_id}}\"\n}"
+            },
+            "url": "{{base_url}}/api/attempts/start"
+          }
+        },
+        {
+          "name": "POST /api/attempts/submit",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var j = pm.response.json();",
+                  "pm.test('Has score and percentage', function () {",
+                  "  pm.expect(j).to.have.property('score');",
+                  "  pm.expect(j).to.have.property('percentage');",
+                  "  pm.expect(j.breakdown).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attemptId\": \"{{attempt_id}}\",\n  \"answers\": {{attempt_answers}}\n}"
+            },
+            "url": "{{base_url}}/api/attempts/submit"
+          }
+        },
+        {
+          "name": "POST /api/attempts/submit — already completed (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 400', function () { pm.response.to.have.status(400); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attemptId\": \"{{attempt_id}}\",\n  \"answers\": {}\n}"
+            },
+            "url": "{{base_url}}/api/attempts/submit"
+          }
+        },
+        {
+          "name": "GET /api/attempts/history",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Array contains completed attempt', function () {",
+                  "  var h = pm.response.json();",
+                  "  pm.expect(h).to.be.an('array');",
+                  "  var done = h.filter(function (a) { return a.status === 'completed'; });",
+                  "  pm.expect(done.length).to.be.above(0);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+            ],
+            "url": "{{base_url}}/api/attempts/history"
+          }
+        }
+      ]
+    }
+  ]
+}

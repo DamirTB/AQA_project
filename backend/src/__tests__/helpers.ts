@@ -8,7 +8,7 @@ import { Question } from '../models/Question';
 import { Category } from '../models/Category';
 import { Attempt } from '../models/Attempt';
 
-const JWT_SECRET = 'dev-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';
 
 export interface TestUser {
   _id: mongoose.Types.ObjectId;
