@@ -1,3 +1,4 @@
+// backend/src/server.ts
 import mongoose from 'mongoose';
 import app from './app';
 import { seedDatabase } from './seed';

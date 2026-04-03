@@ -1,3 +1,4 @@
+// backend/src/seed/index.ts
 import { Category } from '../models/Category';
 import { Exam } from '../models/Exam';
 import { Question } from '../models/Question';
