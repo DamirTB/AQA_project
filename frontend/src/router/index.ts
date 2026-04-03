@@ -1,3 +1,4 @@
+// frontend/src/router/index.ts
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({

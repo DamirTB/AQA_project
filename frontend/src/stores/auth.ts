@@ -1,3 +1,4 @@
+// frontend/src/stores/auth.ts
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import api from '../api/client';
