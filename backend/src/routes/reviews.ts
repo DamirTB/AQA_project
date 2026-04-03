@@ -1,3 +1,4 @@
+// backend/src/routes/reviews.ts
 import { Router } from 'express';
 import { authenticateToken } from '../middleware/auth';
 import * as reviewsController from '../controllers/reviews.controller';

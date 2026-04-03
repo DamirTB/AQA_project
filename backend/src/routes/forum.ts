@@ -1,3 +1,4 @@
+// backend/src/routes/forum.ts
 import { Router } from 'express';
 import { authenticateToken } from '../middleware/auth';
 import * as forumController from '../controllers/forum.controller';

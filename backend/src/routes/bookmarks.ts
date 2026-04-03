@@ -1,3 +1,4 @@
+// backend/src/routes/bookmarks.ts
 import { Router } from 'express';
 import { authenticateToken } from '../middleware/auth';
 import * as bookmarksController from '../controllers/bookmarks.controller';

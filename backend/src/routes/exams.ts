@@ -1,3 +1,4 @@
+// backend/src/routes/exams.ts
 import { Router } from 'express';
 import { authenticateToken } from '../middleware/auth';
 import * as examsController from '../controllers/exams.controller';
