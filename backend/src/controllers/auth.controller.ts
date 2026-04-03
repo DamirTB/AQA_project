@@ -1,3 +1,4 @@
+// backend/src/controllers/auth.controller.ts
 import { Request, Response } from 'express';
 import * as authService from '../services/auth.service';
 import { ServiceError } from '../errors/ServiceError';

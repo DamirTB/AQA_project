@@ -1,3 +1,4 @@
+// backend/src/controllers/bookmarks.controller.ts
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import * as bookmarksService from '../services/bookmarks.service';
@@ -33,7 +34,7 @@ export async function addBookmark(req: AuthRequest, res: Response): Promise<void
 
 export async function removeBookmark(req: AuthRequest, res: Response): Promise<void> {
   try {
-    await bookmarksService.removeBookmark(req.userId!, req.params.examId);
+    await bookmarksService.removeBookmark(req.userId!, req.params.examId as string);
     res.json({ message: 'Bookmark removed' });
   } catch (error) {
     if (error instanceof ServiceError) {

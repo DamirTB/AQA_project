@@ -1,3 +1,4 @@
+// backend/src/controllers/attempts.controller.ts
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import * as attemptsService from '../services/attempts.service';
@@ -41,7 +42,7 @@ export async function submitAttempt(req: AuthRequest, res: Response): Promise<vo
 
 export async function getResult(req: AuthRequest, res: Response): Promise<void> {
   try {
-    const result = await attemptsService.getResult(req.userId!, req.params.id);
+    const result = await attemptsService.getResult(req.userId!, req.params.id as string);
     res.json(result);
   } catch (error) {
     if (error instanceof ServiceError) {

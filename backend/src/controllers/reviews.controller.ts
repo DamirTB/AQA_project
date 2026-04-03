@@ -1,3 +1,4 @@
+// backend/src/controllers/reviews.controller.ts
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import * as reviewsService from '../services/reviews.service';
@@ -23,7 +24,7 @@ export async function createReview(req: AuthRequest, res: Response): Promise<voi
   }
 
   try {
-    const review = await reviewsService.createReview(req.userId!, req.params.id, rating, comment);
+    const review = await reviewsService.createReview(req.userId!, req.params.id as string, rating, comment);
     res.status(201).json(review);
   } catch (error) {
     if (error instanceof ServiceError) {
@@ -37,7 +38,7 @@ export async function createReview(req: AuthRequest, res: Response): Promise<voi
 
 export async function getReviews(req: AuthRequest, res: Response): Promise<void> {
   try {
-    const reviews = await reviewsService.getReviews(req.params.id);
+    const reviews = await reviewsService.getReviews(req.params.id as string);
     res.json(reviews);
   } catch (error) {
     if (error instanceof ServiceError) {

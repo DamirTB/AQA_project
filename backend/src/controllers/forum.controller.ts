@@ -1,3 +1,4 @@
+// backend/src/controllers/forum.controller.ts
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import * as forumService from '../services/forum.service';
@@ -53,7 +54,7 @@ export async function createTopic(req: AuthRequest, res: Response): Promise<void
 
 export async function getTopicById(req: AuthRequest, res: Response): Promise<void> {
   try {
-    const topic = await forumService.getTopicById(req.params.id);
+    const topic = await forumService.getTopicById(req.params.id as string);
     res.json(topic);
   } catch (error) {
     if (error instanceof ServiceError) {
@@ -81,7 +82,7 @@ export async function createComment(req: AuthRequest, res: Response): Promise<vo
   }
 
   try {
-    const comment = await forumService.createComment(req.userId!, req.params.id, body);
+    const comment = await forumService.createComment(req.userId!, req.params.id as string, body);
     res.status(201).json(comment);
   } catch (error) {
     if (error instanceof ServiceError) {

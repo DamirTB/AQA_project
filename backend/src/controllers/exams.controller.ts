@@ -1,3 +1,4 @@
+// backend/src/controllers/exams.controller.ts
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import * as examsService from '../services/exams.service';
@@ -34,7 +35,7 @@ export async function getExams(req: AuthRequest, res: Response): Promise<void> {
 
 export async function getExamById(req: AuthRequest, res: Response): Promise<void> {
   try {
-    const exam = await examsService.getExamById(req.params.id);
+    const exam = await examsService.getExamById(req.params.id as string);
     res.json(exam);
   } catch (error) {
     if (error instanceof ServiceError) {
