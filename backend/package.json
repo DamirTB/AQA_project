@@ -14,6 +14,7 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
+    "globalSetup": "<rootDir>/src/__tests__/jestGlobalSetup.ts",
     "testMatch": ["**/__tests__/**/*.test.ts"],
     "testTimeout": 30000,
     "transform": {
@@ -22,7 +23,9 @@
     "collectCoverageFrom": [
       "src/**/*.ts",
       "!src/server.ts",
-      "!src/**/*.d.ts"
+      "!src/**/*.d.ts",
+      "!src/__tests__/**",
+      "!src/seed/**"
     ],
     "coverageProvider": "v8",
     "coverageReporters": ["text", "lcov", "html"],
@@ -44,6 +47,9 @@
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.0"
+  },
+  "mongodbMemoryServer": {
+    "version": "7.0.14"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
