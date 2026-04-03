@@ -1,3 +1,4 @@
+// backend/src/services/forum.service.ts
 import mongoose from 'mongoose';
 import { ForumTopic } from '../models/ForumTopic';
 import { ForumComment } from '../models/ForumComment';

@@ -1,3 +1,4 @@
+// backend/src/services/auth.service.ts
 import bcrypt from 'bcryptjs';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { User } from '../models/User';

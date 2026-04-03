@@ -1,3 +1,4 @@
+// backend/src/services/bookmarks.service.ts
 import mongoose from 'mongoose';
 import { Bookmark } from '../models/Bookmark';
 import { ServiceError } from '../errors/ServiceError';
