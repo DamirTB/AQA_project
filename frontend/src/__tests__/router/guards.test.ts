@@ -1,3 +1,4 @@
+// frontend/src/__tests__/router/guards.test.ts
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import router from '../../router';
 
