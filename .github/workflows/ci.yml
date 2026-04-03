@@ -34,7 +34,7 @@ jobs:
 
     env:
       NODE_ENV: test
-      JWT_SECRET: ci-test-secret-key
+      JWT_SECRET: dev-secret-key
       MONGODB_URI_TEST: mongodb://localhost:27017/exam_test_ci
 
     defaults:
