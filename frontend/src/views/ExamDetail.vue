@@ -1,4 +1,3 @@
-<!--frontend/src/views/ExamDetail.vue-->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -143,7 +142,6 @@ function stars(n: number): string {
         </div>
       </div>
 
-      <!-- Reviews Section -->
       <h2>Reviews ({{ reviews.length }})</h2>
 
       <div v-if="hasCompleted && !hasReviewed" class="card">

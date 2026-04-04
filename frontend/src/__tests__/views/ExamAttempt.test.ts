@@ -1,10 +1,8 @@
-// frontend/src/__tests__/views/ExamAttempt.test.ts
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import ExamAttempt from '../../views/ExamAttempt.vue';
 
-// ── Mock API client ──────────────────────────────────────────────────────────
 vi.mock('../../api/client', () => ({
     default: {
         get: vi.fn(),
@@ -18,7 +16,6 @@ vi.mock('../../api/client', () => ({
 
 import api from '../../api/client';
 
-// ── Mock vue-router ──────────────────────────────────────────────────────────
 const mockPush    = vi.fn();
 const mockReplace = vi.fn();
 
@@ -27,7 +24,6 @@ vi.mock('vue-router', () => ({
     useRouter: () => ({ push: mockPush, replace: mockReplace }),
 }));
 
-// ── Shared test fixtures ─────────────────────────────────────────────────────
 const historyInProgress = [
     { attemptId: 'attempt-abc', examId: 'exam-001', status: 'in_progress' },
 ];
@@ -49,7 +45,6 @@ function mountComponent() {
     });
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 describe('ExamAttempt.vue', () => {
     beforeEach(() => {
         setActivePinia(createPinia());
@@ -64,7 +59,6 @@ describe('ExamAttempt.vue', () => {
         vi.useRealTimers();
     });
 
-    // ── Loading state ──────────────────────────────────────────────────────────
     describe('Loading state', () => {
         it('shows a loading indicator before data arrives', () => {
             vi.mocked(api.get).mockReturnValue(new Promise(() => {})); // never resolves
@@ -73,7 +67,6 @@ describe('ExamAttempt.vue', () => {
         });
     });
 
-    // ── Successful load ────────────────────────────────────────────────────────
     describe('Successful data load', () => {
         beforeEach(() => {
             vi.mocked(api.get).mockResolvedValue({ data: historyInProgress });
@@ -118,7 +111,6 @@ describe('ExamAttempt.vue', () => {
         });
     });
 
-    // ── Answer selection ───────────────────────────────────────────────────────
     describe('Answer selection', () => {
         beforeEach(() => {
             vi.mocked(api.get).mockResolvedValue({ data: historyInProgress });
@@ -156,7 +148,6 @@ describe('ExamAttempt.vue', () => {
         });
     });
 
-    // ── Submit flow ────────────────────────────────────────────────────────────
     describe('Submit flow', () => {
         it('shows "Submitting..." and disables button while in flight', async () => {
             vi.mocked(api.get).mockResolvedValue({ data: historyInProgress });
@@ -175,7 +166,6 @@ describe('ExamAttempt.vue', () => {
             expect(wrapper.find('button').text()).toBe('Submitting...');
             expect(wrapper.find('button').attributes('disabled')).toBeDefined();
 
-            // Resolve so the test doesn't leak
             resolveSubmit({ data: { attemptId: 'attempt-abc' } });
         });
 
@@ -223,20 +213,17 @@ describe('ExamAttempt.vue', () => {
             const wrapper = mountComponent();
             await flushPromises();
 
-            // Click twice — second click must be ignored (button is disabled)
             wrapper.find('button').trigger('click');
             await wrapper.vm.$nextTick();
             wrapper.find('button').trigger('click');
             await wrapper.vm.$nextTick();
 
-            // api.post should have been called only once for submit
-            expect(vi.mocked(api.post)).toHaveBeenCalledTimes(2); // 1 start + 1 submit
+            expect(vi.mocked(api.post)).toHaveBeenCalledTimes(2);
 
             resolveSubmit({ data: { attemptId: 'attempt-abc' } });
         });
     });
 
-    // ── Error paths ────────────────────────────────────────────────────────────
     describe('Error paths', () => {
         it('shows error when the history API call fails', async () => {
             vi.mocked(api.get).mockRejectedValue(new Error('Network error'));
@@ -259,10 +246,8 @@ describe('ExamAttempt.vue', () => {
         });
     });
 
-    // ── Timer behaviour ────────────────────────────────────────────────────────
     describe('Timer', () => {
         it('applies timer-warning class when less than 60 seconds remain', async () => {
-            // Simulate exam started ~59 minutes 5 seconds ago → 55 sec left
             const nearEnd = new Date(Date.now() - (60 * 60 - 55) * 1000).toISOString();
 
             vi.mocked(api.get).mockResolvedValue({ data: historyInProgress });
@@ -288,7 +273,6 @@ describe('ExamAttempt.vue', () => {
             await wrapper.vm.$nextTick();
             const after = wrapper.find('.timer').text();
 
-            // After 1 second the displayed time should differ
             expect(before).not.toBe(after);
         });
     });

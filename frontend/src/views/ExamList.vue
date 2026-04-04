@@ -1,4 +1,3 @@
-<!--frontend/src/views/ExamList.vue-->
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import api from '../api/client';
@@ -59,7 +58,6 @@ async function toggleBookmark(examId: string) {
       bookmarkedIds.value = new Set(bookmarkedIds.value);
     }
   } catch {
-    // silently fail
   }
 }
 </script>

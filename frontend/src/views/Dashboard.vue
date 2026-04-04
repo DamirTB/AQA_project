@@ -1,4 +1,3 @@
-<!--frontend/src/views/Dashboard.vue-->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth';
@@ -51,7 +50,6 @@ async function removeBookmark(examId: string) {
     await api.delete(`/bookmarks/${examId}`);
     bookmarks.value = bookmarks.value.filter((b) => b.examId !== examId);
   } catch {
-    // silently fail
   }
 }
 
@@ -73,7 +71,6 @@ function formatDate(dateStr: string): string {
     <div v-if="loading" style="padding:20px;text-align:center;color:#666">Loading...</div>
     <div v-else-if="error" class="error-msg">{{ error }}</div>
     <template v-else>
-      <!-- Bookmarked Exams -->
       <div v-if="bookmarks.length > 0" class="card" style="margin-bottom:24px">
         <h2>Bookmarked Exams</h2>
         <div class="bookmarks-grid">
@@ -87,7 +84,6 @@ function formatDate(dateStr: string): string {
         </div>
       </div>
 
-      <!-- Exam History -->
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
           <h2 style="margin-bottom:0">Exam History</h2>

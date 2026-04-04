@@ -1,4 +1,3 @@
-// frontend/src/__tests__/views/ExamDetail.test.ts
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
@@ -218,7 +217,6 @@ describe('ExamDetail.vue', () => {
         const wrapper = mountExamDetail();
         await flushPromises();
 
-        // Submit without typing a comment
         const submitBtn = wrapper.findAll('button').find((b) => b.text() === 'Submit Review');
         await submitBtn!.trigger('click');
 
