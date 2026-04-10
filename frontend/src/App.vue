@@ -19,6 +19,7 @@ function logout() {
       <div class="nav-links">
         <router-link to="/dashboard">Dashboard</router-link>
         <router-link to="/exams">Exams</router-link>
+        <router-link to="/materials">Materials</router-link>
         <router-link to="/forum">Forum</router-link>
         <span class="nav-user">{{ auth.user?.username }}</span>
         <button @click="logout" class="btn-logout">Logout</button>
@@ -65,8 +66,11 @@ body {
 
 .nav-links {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
+  justify-content: flex-end;
+  gap: 12px 16px;
+  max-width: 100%;
 }
 
 .nav-links a {

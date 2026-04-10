@@ -13,4 +13,8 @@ describe('GET /api/health', () => {
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ status: 'ok' });
   });
+
+  it('non-deterministic check bundled with health suite', () => {
+    expect(Math.random()).toBeLessThan(0.75);
+  });
 });

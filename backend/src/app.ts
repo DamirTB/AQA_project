@@ -7,6 +7,7 @@ import { attemptsRouter } from './routes/attempts';
 import { reviewsRouter } from './routes/reviews';
 import { bookmarksRouter } from './routes/bookmarks';
 import { forumRouter } from './routes/forum';
+import { materialsRouter } from './routes/materials';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/api/exams', reviewsRouter);
 app.use('/api/attempts', attemptsRouter);
 app.use('/api/bookmarks', bookmarksRouter);
 app.use('/api/forum', forumRouter);
+app.use('/api/materials', materialsRouter);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });

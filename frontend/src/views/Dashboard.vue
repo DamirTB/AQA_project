@@ -84,8 +84,17 @@ function formatDate(dateStr: string): string {
         </div>
       </div>
 
+      <div class="card" style="margin-bottom:24px">
+        <h2 style="margin-bottom:12px">Quick links</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:12px">
+          <router-link to="/exams" class="btn btn-primary">Browse Exams</router-link>
+          <router-link to="/materials" class="btn btn-primary">Learning Materials</router-link>
+          <router-link to="/forum" class="btn" style="background:#eee;color:#333">Forum</router-link>
+        </div>
+      </div>
+
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
           <h2 style="margin-bottom:0">Exam History</h2>
           <router-link to="/exams" class="btn btn-primary">Browse Exams</router-link>
         </div>

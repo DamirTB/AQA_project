@@ -2,6 +2,7 @@
 import { Category } from '../models/Category';
 import { Exam } from '../models/Exam';
 import { Question } from '../models/Question';
+import { LearningMaterial } from '../models/LearningMaterial';
 
 const satQuestions = [
   {
@@ -149,6 +150,203 @@ const ieltsQuestions = [
   },
 ];
 
+const toeflQuestions = [
+  {
+    text: 'Choose the best completion: "The scientist presented a _____ explanation of the results."',
+    options: ['coherent', 'coherence', 'coherently', 'cohering'],
+    correctOption: 0,
+    order: 1,
+  },
+  {
+    text: 'In academic writing, "mitigate" most nearly means:',
+    options: ['increase', 'measure', 'reduce', 'ignore'],
+    correctOption: 2,
+    order: 2,
+  },
+  {
+    text: 'Select the grammatically correct sentence:',
+    options: [
+      'The data shows that students improves with practice.',
+      'The data show that students improve with practice.',
+      'The data showing that students improve with practice.',
+      'The data is show that students improve with practice.',
+    ],
+    correctOption: 1,
+    order: 3,
+  },
+  {
+    text: 'The phrase "in contrast" is primarily used to:',
+    options: [
+      'Introduce an example',
+      'Show similarity',
+      'Show difference between ideas',
+      'Conclude an argument',
+    ],
+    correctOption: 2,
+    order: 4,
+  },
+  {
+    text: 'Choose the best word: "The lecture was so _____ that everyone stayed focused."',
+    options: ['engage', 'engaging', 'engaged', 'engagement'],
+    correctOption: 1,
+    order: 5,
+  },
+  {
+    text: 'Which transition best indicates cause and effect?',
+    options: ['however', 'for example', 'therefore', 'meanwhile'],
+    correctOption: 2,
+    order: 6,
+  },
+  {
+    text: 'What is the main purpose of a thesis statement?',
+    options: [
+      'To list references',
+      'To summarize every paragraph',
+      'To state the central argument',
+      'To provide background statistics only',
+    ],
+    correctOption: 2,
+    order: 7,
+  },
+  {
+    text: 'Choose the correct preposition: "The professor insisted _____ revising the draft."',
+    options: ['in', 'on', 'at', 'to'],
+    correctOption: 1,
+    order: 8,
+  },
+  {
+    text: 'In TOEFL speaking, a strong response usually includes:',
+    options: [
+      'Only one short sentence',
+      'Memorized phrases without examples',
+      'Clear opinion with supporting reasons',
+      'As many advanced words as possible without structure',
+    ],
+    correctOption: 2,
+    order: 9,
+  },
+  {
+    text: 'Choose the best completion: "Students are encouraged to _____ multiple sources."',
+    options: ['consult', 'consulting', 'consulted', 'consults'],
+    correctOption: 0,
+    order: 10,
+  },
+];
+
+const untQuestions = [
+  {
+    text: 'UNT Math: If 2x - 5 = 13, x equals:',
+    options: ['4', '6', '8', '9'],
+    correctOption: 3,
+    order: 1,
+  },
+  {
+    text: 'UNT Math: The value of 3^3 is:',
+    options: ['6', '9', '18', '27'],
+    correctOption: 3,
+    order: 2,
+  },
+  {
+    text: 'UNT Reading: The main idea of a paragraph is:',
+    options: [
+      'A minor detail',
+      'The central point the author wants to convey',
+      'A random supporting fact',
+      'The final sentence only',
+    ],
+    correctOption: 1,
+    order: 3,
+  },
+  {
+    text: 'UNT Grammar: Choose the correct form: "If she _____ earlier, she would catch the bus."',
+    options: ['left', 'leaves', 'had left', 'was leaving'],
+    correctOption: 2,
+    order: 4,
+  },
+  {
+    text: 'UNT History: The primary role of a constitution is to:',
+    options: [
+      'Describe daily weather',
+      'Set fundamental laws and principles of a state',
+      'List all citizens by name',
+      'Replace all local regulations',
+    ],
+    correctOption: 1,
+    order: 5,
+  },
+  {
+    text: 'UNT Logic: Which number comes next in the sequence 2, 4, 8, 16, ...?',
+    options: ['18', '24', '30', '32'],
+    correctOption: 3,
+    order: 6,
+  },
+  {
+    text: 'UNT Math: A right triangle has legs 3 and 4. The hypotenuse is:',
+    options: ['5', '6', '7', '8'],
+    correctOption: 0,
+    order: 7,
+  },
+  {
+    text: 'UNT Reading: An inference is:',
+    options: [
+      'A statement directly copied from the text',
+      'A conclusion based on clues and evidence',
+      'A grammar correction',
+      'A list of key words only',
+    ],
+    correctOption: 1,
+    order: 8,
+  },
+  {
+    text: 'UNT Grammar: Choose the correct sentence:',
+    options: [
+      'He do not like coffee.',
+      'He does not likes coffee.',
+      'He does not like coffee.',
+      'He not like coffee.',
+    ],
+    correctOption: 2,
+    order: 9,
+  },
+  {
+    text: 'UNT Math: What is 25% of 200?',
+    options: ['25', '40', '50', '75'],
+    correctOption: 2,
+    order: 10,
+  },
+];
+
+const learningMaterials = [
+  {
+    title: 'Linear Equations: Quick Start',
+    topic: 'Math',
+    level: 'beginner' as const,
+    content:
+      'A linear equation usually looks like ax + b = c. To solve it, isolate x by applying inverse operations on both sides equally.',
+  },
+  {
+    title: 'Quadratic Equations and Factoring',
+    topic: 'Math',
+    level: 'intermediate' as const,
+    content:
+      'Quadratic equations are written as ax^2 + bx + c = 0. Common solving methods include factoring, completing the square, and the quadratic formula.',
+  },
+  {
+    title: 'Functions and Graph Interpretation',
+    topic: 'Math',
+    level: 'intermediate' as const,
+    content:
+      'Functions map each input to one output. Understanding slope, intercepts, and growth patterns helps you quickly interpret test-style graphs.',
+  },
+  {
+    title: 'Geometry Essentials for Test Day',
+    topic: 'Math',
+    level: 'beginner' as const,
+    content:
+      'Memorize high-frequency formulas: triangle area, circle circumference/area, and Pythagorean triples. Draw diagrams to avoid careless mistakes.',
+  },
+];
+
 export async function seedDatabase(): Promise<void> {
   const examCount = await Exam.countDocuments();
   if (examCount > 0) {
@@ -184,6 +382,22 @@ export async function seedDatabase(): Promise<void> {
     categoryId: languageExams._id,
   });
 
+  const toeflExam = await Exam.create({
+    title: 'TOEFL iBT Preparation',
+    description:
+      'Practice TOEFL-style reading, grammar, and academic English questions to improve performance in integrated language tasks.',
+    timeLimitMinutes: 20,
+    categoryId: languageExams._id,
+  });
+
+  const untExam = await Exam.create({
+    title: 'UNT Comprehensive Practice',
+    description:
+      'Mock UNT exam with mixed questions in mathematics, reading comprehension, grammar, history, and logic.',
+    timeLimitMinutes: 20,
+    categoryId: standardizedTests._id,
+  });
+
   await Question.insertMany(
     satQuestions.map((q) => ({ ...q, examId: satExam._id }))
   );
@@ -192,5 +406,17 @@ export async function seedDatabase(): Promise<void> {
     ieltsQuestions.map((q) => ({ ...q, examId: ieltsExam._id }))
   );
 
-  console.log('Database seeded with 2 categories, 2 exams (SAT + IELTS), and 20 questions.');
+  await Question.insertMany(
+    toeflQuestions.map((q) => ({ ...q, examId: toeflExam._id }))
+  );
+
+  await Question.insertMany(
+    untQuestions.map((q) => ({ ...q, examId: untExam._id }))
+  );
+
+  await LearningMaterial.insertMany(learningMaterials);
+
+  console.log(
+    'Database seeded with 2 categories, 4 exams (SAT, IELTS, TOEFL, UNT), 40 questions, and 4 learning materials.'
+  );
 }
