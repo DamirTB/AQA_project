@@ -2,6 +2,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+
+vi.mock('../../config/uiFeatures', () => ({
+  showForum: true,
+  showBookmarks: true,
+  showReviews: true,
+}));
+
 import Dashboard from '../../views/Dashboard.vue';
 
 vi.mock('../../api/client', () => ({
@@ -80,7 +87,6 @@ describe('Dashboard.vue', () => {
     });
 
     it('renders exam history after load', async () => {
-        vi.mocked(api.get).mockResolvedValue({ data: [] });
         vi.mocked(api.get)
             .mockResolvedValueOnce({ data: mockHistory })
             .mockResolvedValueOnce({ data: mockBookmarks });

@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import api from '../api/client';
+import { showForum, showBookmarks } from '../config/uiFeatures';
 
 const auth = useAuthStore();
 
@@ -32,12 +33,12 @@ const error = ref('');
 
 onMounted(async () => {
   try {
-    const [historyRes, bookmarksRes] = await Promise.all([
-      api.get('/attempts/history'),
-      api.get('/bookmarks'),
-    ]);
+    const historyRes = await api.get('/attempts/history');
     history.value = historyRes.data;
-    bookmarks.value = bookmarksRes.data;
+    if (showBookmarks) {
+      const { data } = await api.get('/bookmarks');
+      bookmarks.value = data;
+    }
   } catch (err: any) {
     error.value = err.response?.data?.error || 'Failed to load data';
   } finally {
@@ -71,7 +72,7 @@ function formatDate(dateStr: string): string {
     <div v-if="loading" style="padding:20px;text-align:center;color:#666">Loading...</div>
     <div v-else-if="error" class="error-msg">{{ error }}</div>
     <template v-else>
-      <div v-if="bookmarks.length > 0" class="card" style="margin-bottom:24px">
+      <div v-if="showBookmarks && bookmarks.length > 0" class="card" style="margin-bottom:24px">
         <h2>Bookmarked Exams</h2>
         <div class="bookmarks-grid">
           <div v-for="bm in bookmarks" :key="bm.id" class="bookmark-item">
@@ -88,8 +89,8 @@ function formatDate(dateStr: string): string {
         <h2 style="margin-bottom:12px">Quick links</h2>
         <div style="display:flex;flex-wrap:wrap;gap:12px">
           <router-link to="/exams" class="btn btn-primary">Browse Exams</router-link>
-          <router-link to="/materials" class="btn btn-primary">Learning Materials</router-link>
-          <router-link to="/forum" class="btn" style="background:#eee;color:#333">Forum</router-link>
+          <!-- <router-link to="/materials" class="btn btn-primary">Learning Materials</router-link> -->
+          <router-link v-if="showForum" to="/forum" class="btn" style="background:#eee;color:#333">Forum</router-link>
         </div>
       </div>
 

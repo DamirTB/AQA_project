@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import api from '../api/client';
+import { showBookmarks } from '../config/uiFeatures';
 
 interface Exam {
   id: string;
@@ -31,14 +32,13 @@ const filteredExams = computed(() => {
 
 onMounted(async () => {
   try {
-    const [examsRes, catsRes, bookRes] = await Promise.all([
-      api.get('/exams'),
-      api.get('/exams/categories'),
-      api.get('/bookmarks'),
-    ]);
+    const [examsRes, catsRes] = await Promise.all([api.get('/exams'), api.get('/exams/categories')]);
     exams.value = examsRes.data;
     categories.value = catsRes.data;
-    bookmarkedIds.value = new Set(bookRes.data.map((b: any) => b.examId));
+    if (showBookmarks) {
+      const bookRes = await api.get('/bookmarks');
+      bookmarkedIds.value = new Set(bookRes.data.map((b: { examId: string }) => b.examId));
+    }
   } catch (err: any) {
     error.value = err.response?.data?.error || 'Failed to load exams';
   } finally {
@@ -47,6 +47,7 @@ onMounted(async () => {
 });
 
 async function toggleBookmark(examId: string) {
+  if (!showBookmarks) return;
   try {
     if (bookmarkedIds.value.has(examId)) {
       await api.delete(`/bookmarks/${examId}`);
@@ -82,7 +83,13 @@ async function toggleBookmark(examId: string) {
       <div v-for="exam in filteredExams" :key="exam.id" class="card exam-card">
         <div class="exam-header">
           <h2>{{ exam.title }}</h2>
-          <button class="bookmark-btn" :class="{ bookmarked: bookmarkedIds.has(exam.id) }" @click.prevent="toggleBookmark(exam.id)" :title="bookmarkedIds.has(exam.id) ? 'Remove bookmark' : 'Bookmark'">
+          <button
+            v-if="showBookmarks"
+            class="bookmark-btn"
+            :class="{ bookmarked: bookmarkedIds.has(exam.id) }"
+            @click.prevent="toggleBookmark(exam.id)"
+            :title="bookmarkedIds.has(exam.id) ? 'Remove bookmark' : 'Bookmark'"
+          >
             {{ bookmarkedIds.has(exam.id) ? '★' : '☆' }}
           </button>
         </div>

@@ -1,6 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+
+vi.mock('../../config/uiFeatures', () => ({
+  showForum: true,
+  showBookmarks: true,
+  showReviews: true,
+}));
+
 import ExamDetail from '../../views/ExamDetail.vue';
 
 vi.mock('../../api/client', () => ({
@@ -69,8 +76,8 @@ describe('ExamDetail.vue', () => {
     it('renders exam title and description after load', async () => {
         vi.mocked(api.get)
             .mockResolvedValueOnce({ data: mockExam })
-            .mockResolvedValueOnce({ data: mockReviews })
-            .mockResolvedValueOnce({ data: [] });
+            .mockResolvedValueOnce({ data: [] })
+            .mockResolvedValueOnce({ data: mockReviews });
 
         const wrapper = mountExamDetail();
         await flushPromises();
@@ -142,8 +149,8 @@ describe('ExamDetail.vue', () => {
     it('renders existing reviews', async () => {
         vi.mocked(api.get)
             .mockResolvedValueOnce({ data: mockExam })
-            .mockResolvedValueOnce({ data: mockReviews })
-            .mockResolvedValueOnce({ data: [] });
+            .mockResolvedValueOnce({ data: [] })
+            .mockResolvedValueOnce({ data: mockReviews });
 
         const wrapper = mountExamDetail();
         await flushPromises();
@@ -181,10 +188,10 @@ describe('ExamDetail.vue', () => {
 
         vi.mocked(api.get)
             .mockResolvedValueOnce({ data: mockExam })
-            .mockResolvedValueOnce({ data: [] })
             .mockResolvedValueOnce({
                 data: [{ attemptId: 'a1', examId: 'exam-001', status: 'completed' }],
-            });
+            })
+            .mockResolvedValueOnce({ data: [] });
 
         const wrapper = mountExamDetail();
         await flushPromises();
@@ -209,10 +216,10 @@ describe('ExamDetail.vue', () => {
 
         vi.mocked(api.get)
             .mockResolvedValueOnce({ data: mockExam })
-            .mockResolvedValueOnce({ data: [] })
             .mockResolvedValueOnce({
                 data: [{ attemptId: 'a1', examId: 'exam-001', status: 'completed' }],
-            });
+            })
+            .mockResolvedValueOnce({ data: [] });
 
         const wrapper = mountExamDetail();
         await flushPromises();

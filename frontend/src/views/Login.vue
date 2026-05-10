@@ -48,6 +48,9 @@ async function handleLogin() {
           {{ loading ? 'Logging in...' : 'Login' }}
         </button>
       </form>
+      <p class="forgot-link">
+        <router-link to="/forgot-password">Forgot your password?</router-link>
+      </p>
       <p class="auth-footer">
         Don't have an account? <router-link to="/register">Register</router-link>
       </p>
@@ -75,6 +78,16 @@ async function handleLogin() {
 }
 
 .auth-footer a {
+  color: #1a73e8;
+}
+
+.forgot-link {
+  margin-top: 12px;
+  text-align: right;
+  font-size: 13px;
+}
+
+.forgot-link a {
   color: #1a73e8;
 }
 </style>

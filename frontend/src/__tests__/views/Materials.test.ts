@@ -89,4 +89,46 @@ describe('Materials.vue', () => {
     expect(wrapper.text()).toContain('Triangles');
     expect(wrapper.text()).not.toContain('Essay Structure');
   });
+
+  it('shows error message when API request fails', async () => {
+    vi.mocked(api.get).mockRejectedValue({
+      response: { data: { error: 'Server unavailable' } },
+    });
+
+    const wrapper = mountMaterials();
+    await flushPromises();
+
+    expect(wrapper.text()).toContain('Server unavailable');
+    expect(wrapper.text()).not.toContain('Loading');
+  });
+
+  it('shows empty state when there are no materials', async () => {
+    vi.mocked(api.get).mockResolvedValue({ data: [] });
+
+    const wrapper = mountMaterials();
+    await flushPromises();
+
+    expect(wrapper.text()).toContain('No learning materials found');
+  });
+
+  it('renders Advanced level label', async () => {
+    vi.mocked(api.get).mockResolvedValue({
+      data: [
+        {
+          id: 'adv1',
+          title: 'Deep Dive Topic',
+          topic: 'Math',
+          level: 'advanced',
+          content: 'Advanced topics require careful proofs and step-by-step justification throughout.',
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    });
+
+    const wrapper = mountMaterials();
+    await flushPromises();
+
+    expect(wrapper.text()).toContain('Advanced');
+    expect(wrapper.text()).toContain('Deep Dive Topic');
+  });
 });

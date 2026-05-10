@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { useAuthStore } from './stores/auth';
 import { useRouter } from 'vue-router';
+import { showForum } from './config/uiFeatures';
 
 const auth = useAuthStore();
 const router = useRouter();
@@ -19,8 +20,8 @@ function logout() {
       <div class="nav-links">
         <router-link to="/dashboard">Dashboard</router-link>
         <router-link to="/exams">Exams</router-link>
-        <router-link to="/materials">Materials</router-link>
-        <router-link to="/forum">Forum</router-link>
+        <!-- <router-link to="/materials">Materials</router-link> -->
+        <router-link v-if="showForum" to="/forum">Forum</router-link>
         <span class="nav-user">{{ auth.user?.username }}</span>
         <button @click="logout" class="btn-logout">Logout</button>
       </div>

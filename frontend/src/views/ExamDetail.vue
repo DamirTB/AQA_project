@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import api from '../api/client';
+import { showReviews } from '../config/uiFeatures';
 
 const route = useRoute();
 const router = useRouter();
@@ -40,19 +41,20 @@ const reviewSuccess = ref('');
 onMounted(async () => {
   try {
     const examId = route.params.id;
-    const [examRes, reviewsRes, historyRes] = await Promise.all([
-      api.get(`/exams/${examId}`),
-      api.get(`/exams/${examId}/reviews`),
-      api.get('/attempts/history'),
-    ]);
+    const examRes = await api.get(`/exams/${examId}`);
     exam.value = examRes.data;
-    reviews.value = reviewsRes.data;
 
-    const currentUsername = JSON.parse(localStorage.getItem('user') || '{}').username;
+    const historyRes = await api.get('/attempts/history');
     hasCompleted.value = historyRes.data.some(
-      (a: any) => a.examId === examId && a.status === 'completed'
+      (a: { examId: string; status: string }) => a.examId === examId && a.status === 'completed',
     );
-    hasReviewed.value = reviewsRes.data.some((r: any) => r.username === currentUsername);
+
+    if (showReviews) {
+      const reviewsRes = await api.get(`/exams/${examId}/reviews`);
+      reviews.value = reviewsRes.data;
+      const currentUsername = JSON.parse(localStorage.getItem('user') || '{}').username;
+      hasReviewed.value = reviewsRes.data.some((r: { username: string }) => r.username === currentUsername);
+    }
   } catch (err: any) {
     error.value = err.response?.data?.error || 'Failed to load exam';
   } finally {
@@ -74,6 +76,7 @@ async function startExam() {
 }
 
 async function submitReview() {
+  if (!showReviews) return;
   reviewError.value = '';
   reviewSuccess.value = '';
 
@@ -142,6 +145,7 @@ function stars(n: number): string {
         </div>
       </div>
 
+      <template v-if="showReviews">
       <h2>Reviews ({{ reviews.length }})</h2>
 
       <div v-if="hasCompleted && !hasReviewed" class="card">
@@ -185,6 +189,7 @@ function stars(n: number): string {
         </div>
         <p class="review-comment">{{ review.comment }}</p>
       </div>
+      </template>
     </div>
   </div>
 </template>

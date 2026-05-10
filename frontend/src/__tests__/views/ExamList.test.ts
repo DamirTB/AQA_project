@@ -2,6 +2,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+
+vi.mock('../../config/uiFeatures', () => ({
+  showForum: true,
+  showBookmarks: true,
+  showReviews: true,
+}));
+
 import ExamList from '../../views/ExamList.vue';
 
 vi.mock('../../api/client', () => ({
