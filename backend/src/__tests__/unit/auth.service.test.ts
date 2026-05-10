@@ -1,8 +1,12 @@
 // backend/src/__tests__/unit/auth.service.test.ts
+import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import { connect, disconnect, clearCollections } from '../testDb';
 import { createUser } from '../helpers';
 import * as authService from '../../services/auth.service';
+import * as emailService from '../../services/email.service';
 import { ServiceError } from '../../errors/ServiceError';
+import { User } from '../../models/User';
 
 beforeAll(connect);
 afterAll(disconnect);
@@ -85,5 +89,83 @@ describe('authService.login', () => {
 
   it('throws a ServiceError (not a generic Error) on failure', async () => {
     await expect(authService.login('nobody@example.com', 'pass')).rejects.toBeInstanceOf(ServiceError);
+  });
+});
+
+describe('authService.forgotPassword', () => {
+  let sendSpy: jest.SpiedFunction<typeof emailService.sendPasswordResetEmail>;
+
+  beforeEach(() => {
+    sendSpy = jest.spyOn(emailService, 'sendPasswordResetEmail').mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    sendSpy.mockRestore();
+  });
+
+  it('does not send email when email is not registered', async () => {
+    await authService.forgotPassword('missing@example.com');
+    expect(sendSpy).not.toHaveBeenCalled();
+  });
+
+  it('stores a hashed token and sends email with raw token when user exists', async () => {
+    await authService.register('hpuser', 'hp@example.com', 'password123');
+    await authService.forgotPassword('hp@example.com');
+
+    expect(sendSpy).toHaveBeenCalledTimes(1);
+    const [toEmail, rawToken] = sendSpy.mock.calls[0];
+    expect(toEmail).toBe('hp@example.com');
+    expect(rawToken).toMatch(/^[a-f0-9]{64}$/);
+
+    const user = await User.findOne({ email: 'hp@example.com' });
+    expect(user?.resetPasswordToken).toBe(crypto.createHash('sha256').update(rawToken).digest('hex'));
+    expect(user?.resetPasswordExpires).toBeDefined();
+    expect(user!.resetPasswordExpires!.getTime()).toBeGreaterThan(Date.now());
+  });
+});
+
+describe('authService.resetPassword', () => {
+  let sendSpy: jest.SpiedFunction<typeof emailService.sendPasswordResetEmail>;
+
+  beforeEach(() => {
+    sendSpy = jest.spyOn(emailService, 'sendPasswordResetEmail').mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    sendSpy.mockRestore();
+  });
+
+  it('updates password and clears reset fields when token is valid', async () => {
+    await authService.register('rpuser', 'rp@example.com', 'oldpassword');
+    await authService.forgotPassword('rp@example.com');
+    const rawToken = sendSpy.mock.calls[0][1] as string;
+
+    await authService.resetPassword(rawToken, 'newpassword123');
+
+    const user = await User.findOne({ email: 'rp@example.com' });
+    expect(user?.resetPasswordToken).toBeUndefined();
+    expect(user?.resetPasswordExpires).toBeUndefined();
+    expect(await bcrypt.compare('newpassword123', user!.passwordHash)).toBe(true);
+  });
+
+  it('throws 400 for invalid token', async () => {
+    await expect(authService.resetPassword('not-a-valid-token-hex', 'newpass12')).rejects.toMatchObject({
+      statusCode: 400,
+      message: 'Invalid or expired reset token',
+    });
+  });
+
+  it('throws 400 when token has expired', async () => {
+    await authService.register('exuser', 'ex@example.com', 'password123');
+    const raw = crypto.randomBytes(32).toString('hex');
+    const hashed = crypto.createHash('sha256').update(raw).digest('hex');
+    await User.updateOne(
+      { email: 'ex@example.com' },
+      { resetPasswordToken: hashed, resetPasswordExpires: new Date(Date.now() - 1000) },
+    );
+
+    await expect(authService.resetPassword(raw, 'newpass12')).rejects.toMatchObject({
+      statusCode: 400,
+    });
   });
 });

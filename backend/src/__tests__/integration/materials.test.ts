@@ -64,6 +64,23 @@ describe('GET /api/materials', () => {
     expect(res.body[0].topic).toBe('Math');
     expect(res.body[0].title).toBe('Triangles and Angles');
   });
+
+  it('returns empty array when topic matches nothing', async () => {
+    const user = await createUser();
+    await LearningMaterial.create({
+      title: 'Only Math Topic Here',
+      topic: 'Math',
+      level: 'beginner',
+      content: 'This entry exists so we can filter for a different topic and expect zero results.',
+    });
+
+    const res = await request(app)
+      .get('/api/materials?topic=History')
+      .set(authHeader(user.token));
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(0);
+  });
 });
 
 describe('GET /api/materials/:id', () => {
